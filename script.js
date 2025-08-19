@@ -10,15 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
         allLightIcons.forEach(icon => icon.classList.toggle('hidden', isDark));
     };
 
-    // Set initial theme based on localStorage or OS preference
     const isDarkMode = localStorage.getItem('color-theme') === 'dark' || 
-                       (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                        (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
     document.documentElement.classList.toggle('dark', isDarkMode);
     updateIcons(isDarkMode);
 
-
-    // Listener for all theme toggle buttons
     themeToggleBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const isDark = document.documentElement.classList.toggle('dark');
@@ -27,19 +24,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- Data for Skills and Projects ---
-    const skills = [
-        { name: 'C', icon: 'ph-file-c' },
-        { name: 'C#', icon: 'ph-file-cpp' }, // Using Cpp icon as a stand-in
-        { name: 'Python', icon: 'ph-file-py' },
-        { name: 'SQL', icon: 'ph-database' },
-        { name: 'HTML', icon: 'ph-file-html' },
-        { name: 'CSS', icon: 'ph-file-css' },
-        { name: 'ASP.NET MVC', icon: 'ph-microsoft-excel-logo' }, // Stand-in
-        { name: 'Django', icon: 'ph-leaf' }, // Stand-in
-        { name: 'Flask', icon: 'ph-brandy' }, // Stand-in
-        { name: 'Git', icon: 'ph-git-branch' },
-        { name: 'Bootstrap', icon: 'ph-bootstrap-logo' }
+    // --- Data for Skills, Experience, and Projects ---
+    const skills = {
+        "Programming Languages": [
+            { name: 'C', icon: 'ph-file-c' },
+            { name: 'C#', icon: 'ph-microsoft-logo' },
+            { name: 'Python3', icon: 'ph-file-py' },
+            { name: 'HTML', icon: 'ph-file-html' },
+            { name: 'CSS', icon: 'ph-file-css' }
+        ],
+        "Frameworks & Tools": [
+            { name: 'ASP.NET (MVC)', icon: 'ph-microsoft-logo' },
+            { name: 'Django', icon: 'ph-leaf' },
+            { name: 'Figma', icon: 'ph-figma-logo' },
+            { name: 'Git', icon: 'ph-git-branch' },
+            { name: 'DBMS (SSMS, MySQL)', icon: 'ph-database' }
+        ]
+    };
+
+    const experience = [
+        {
+            company: 'Cognizant',
+            role: 'Employee',
+            years: 'Present',
+            description: 'My current role Software Engineer Trainee', // Add a brief description here
+            icon: 'ph-computer-tower'
+        },
+        {
+            company: 'Cognizant',
+            role: 'Internship',
+            years: '2025',
+            description: 'Gained hands-on experience in ASP.NET',
+            icon: 'ph-graduation-cap'
+        },
+        {
+            company: 'NASSCOM',
+            role: 'Internship',
+            years: '2024',
+            description: 'Developed skills in AI/Data Science',
+            icon: 'ph-briefcase'
+        },
+        {
+            company: 'Indo-MIM',
+            role: 'Internship',
+            years: '2022',
+            description: 'Gained skill on .Net and SQL',
+            icon: 'ph-gear-six'
+        }
     ];
 
     const projects = [
@@ -82,14 +113,49 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inject Skills
     const skillsContainer = document.getElementById('skills-container');
     if (skillsContainer) {
-        skills.forEach(skill => {
-            const skillEl = document.createElement('div');
-            skillEl.className = 'glass-card p-4 rounded-lg flex flex-col items-center justify-center';
-            skillEl.innerHTML = `
-                <i class="ph-fill ${skill.icon} text-5xl text-accent mb-2"></i>
-                <span class="card-description">${skill.name}</span>
+        for (const category in skills) {
+            const categorySection = document.createElement('div');
+            categorySection.className = 'mb-12';
+            categorySection.innerHTML = `
+                <h3 class="text-2xl font-semibold mb-6 text-accent">${category}</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 text-center" id="skills-${category.toLowerCase().replace(/\s/g, '-')}"></div>
             `;
-            skillsContainer.appendChild(skillEl);
+            skillsContainer.appendChild(categorySection);
+
+            const categorySkillsContainer = document.getElementById(`skills-${category.toLowerCase().replace(/\s/g, '-')}`);
+            skills[category].forEach(skill => {
+                const skillEl = document.createElement('div');
+                skillEl.className = 'glass-card p-4 rounded-lg flex flex-col items-center justify-center';
+                skillEl.innerHTML = `
+                    <i class="ph-fill ${skill.icon} text-5xl text-accent mb-2"></i>
+                    <span class="card-description font-medium">${skill.name}</span>
+                `;
+                categorySkillsContainer.appendChild(skillEl);
+            });
+        }
+    }
+
+    // Inject Experience
+    const experienceContainer = document.getElementById('experience-container');
+    if (experienceContainer) {
+        experience.forEach((job, index) => {
+            const experienceEl = document.createElement('div');
+            experienceEl.className = `experience-item reveal ${index % 2 === 0 ? 'reveal-left' : 'reveal-right'}`;
+            experienceEl.innerHTML = `
+                <div class="job-circle">
+                    <i class="ph-fill ${job.icon} text-xl"></i>
+                </div>
+                <div class="job-card glass-card p-6 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="ph-fill ${job.icon} text-2xl text-accent mr-3 md:hidden"></i>
+                        <h4 class="text-xl font-bold">${job.company}</h4>
+                    </div>
+                    <p class="text-sm font-semibold text-accent mb-1">${job.role}</p>
+                    <p class="text-xs text-[var(--text-color-secondary)] mb-2">${job.years}</p>
+                    <p class="text-sm text-[var(--text-color-secondary)]">${job.description}</p>
+                </div>
+            `;
+            experienceContainer.appendChild(experienceEl);
         });
     }
 
