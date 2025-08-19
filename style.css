@@ -17,6 +17,10 @@ body {
     --hero-circle-bg: rgba(231, 229, 228, 0.7);
     --header-bg: rgba(238, 229, 218, 0.8);
     --pattern-color: rgba(26, 25, 25, 0.2);
+    
+    /* 🛠️ CORRECTED LINE COLOR */
+    --timeline-dot: var(--accent-color);
+    --timeline-line: var(--text-color-secondary); /* This is the fix. A darker, more visible color. */
 }
 
 /* 🎨 DARK THEME: MODERN SLATE */
@@ -33,10 +37,15 @@ body {
     --hero-circle-bg: rgba(238, 229, 218, 0.05);
     --header-bg: rgba(26, 25, 25, 0.85);
     --pattern-color: rgba(238, 229, 218, 0.08);
+    
+    /* 🛠️ KEPT AS IS */
+    --timeline-dot: var(--accent-color);
+    --timeline-line: rgba(238, 229, 218, 0.2);
 }
 
+/* The rest of the CSS remains unchanged. */
 body {
-    font-family: 'Playfair Display', serif; /* Font changed as requested */
+    font-family: 'Poppins', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     position: relative;
@@ -126,15 +135,25 @@ body::before {
 /* Scroll-triggered animations */
 .reveal {
     position: relative;
-    transform: translateY(100px);
     opacity: 0;
     transition: 1s all ease;
 }
 
 .reveal.active {
-    transform: translateY(0);
     opacity: 1;
 }
+
+/* New: Side-specific reveal for Experience section */
+.reveal-left {
+    transform: translateX(-100px);
+}
+.reveal-right {
+    transform: translateX(100px);
+}
+.reveal-left.active, .reveal-right.active {
+    transform: translateX(0);
+}
+
 
 /* Custom button style */
 .btn {
@@ -163,12 +182,12 @@ body::before {
 
 /* Hero Image Styles */
 .hero-image-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 8px;
+ position: relative;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ overflow: hidden;
+ border-radius: 8px;
 }
 .hero-image-container::before {
     content: '';
@@ -186,12 +205,12 @@ body::before {
 }
 
 .hero-image {
-  position: relative;
-  z-index: 1;
-  width: 400px;
-  height: auto;
-  max-width: 100%;
-  animation: subtle-zoom-pan 15s ease-in-out infinite alternate;
+ position: relative;
+ z-index: 1;
+ width: 400px;
+ height: auto;
+ max-width: 100%;
+ animation: subtle-zoom-pan 15s ease-in-out infinite alternate;
 }
 
 /* Project card flip effect */
@@ -246,8 +265,8 @@ section[id] {
 
 /* Class to apply the animation */
 .animate-on-load {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
 }
 
 /* Optional classes for staggered effect */
@@ -387,4 +406,82 @@ section[id] {
 /* Mobile Menu Icon Styling */
 #main-nav #mobile-menu-button {
     color: var(--text-color);
+}
+
+
+/* New Experience Section Styles */
+.experience-timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.experience-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background-color: var(--timeline-line);
+    z-index: -1;
+}
+
+.experience-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 2rem;
+}
+.experience-item:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.experience-item .job-circle {
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: var(--timeline-dot);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: var(--bg-color);
+}
+
+.experience-item .job-card {
+    width: calc(50% - 20px);
+    position: relative;
+    padding: 1.5rem;
+}
+
+.experience-item:nth-child(odd) .job-card {
+    margin-right: 20px;
+}
+.experience-item:nth-child(even) .job-card {
+    margin-left: 20px;
+}
+
+@media (max-width: 767px) {
+    .experience-timeline::before {
+        left: 20px;
+    }
+    .experience-item {
+        flex-direction: row !important;
+    }
+    .experience-item .job-circle {
+        left: 20px;
+        transform: translateX(0);
+        top: 0;
+    }
+    .experience-item .job-card {
+        width: calc(100% - 70px);
+        margin-left: 50px !important;
+        margin-right: 0 !important;
+    }
 }
